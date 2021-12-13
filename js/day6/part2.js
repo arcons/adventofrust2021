@@ -17,7 +17,7 @@ input.forEach(i => {
   currentFish[i]++;
 })
 
-for (i = 0; i < 80; i++) {
+for (i = 0; i < 256; i++) {
   let respawn = currentFish[0]
   let currentSix = currentFish[7]
   // move all items over
