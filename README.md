@@ -4,4 +4,7 @@ Rust for AOC 2021
 
 # Day 1
 
-This language is not made for AoC
+This language is not made for AoC.
+
+# Day 2
+Switched to cargo, gonna just swap file names of main.rs and use cargo.run
