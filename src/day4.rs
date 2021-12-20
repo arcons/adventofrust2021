@@ -12,7 +12,7 @@ fn main() {
     // println!("Searching for {}", query);
     // println!("In file {}", filename);
 
-    let contents = load_from_file("./day1input1.txt");
+    let contents = load_from_file("./inputs/day4input1.txt");
     // let part1Answer =  part1(contents);
     // println!("Part 1 {}", part1Answer);
     let part2Answer =  part2(contents);
