@@ -3,60 +3,111 @@ use std::io::BufReader;
 use std::io::BufRead;
 
 fn main() {
-    // --snip--
-    // let args: Vec<String> = env::args().collect();
 
-    // let query = &args[1];
-    // let filename = &args[2];
-
-    // println!("Searching for {}", query);
-    // println!("In file {}", filename);
-
-    let contents = load_from_file("./day1input1.txt");
-    // let part1Answer =  part1(contents);
-    // println!("Part 1 {}", part1Answer);
-    let part2Answer =  part2(contents);
-    println!("Part 2 {}", part2Answer);
+    let contents = load_from_file("./inputs/test.txt");
+    // let part_1_answer =  part1(contents);
+    // println!("Part 1 {}", part_1_answer);
+    let part_2_answer =  part2(contents);
+    println!("Part 2 {}", part_2_answer);
 }
 
-fn part1(input: Vec<i32>) -> i32 {
-  let mut increases = 0;
-  let mut lastVal = 0;
-  for val in input.iter() {
-    if &lastVal < val {
-      increases += 1;
+fn part1(input: Vec<Vec<char>>) -> i32 {
+  let mut gamma: Vec<char> = vec![];
+  let mut epsilon: Vec<char> = vec![];
+  // let all_bin = input.len();
+  for y in 0..input[0].len() {
+    let mut zero_count = 0;
+    let mut one_count = 0;
+
+    for x in 0..input.len() {
+      let current = input[x][y];
+      if current == '0' {
+        zero_count+=1;
+      }
+      else if current == '1' {
+        one_count+=1;
+      }
     }
-    lastVal = *val;
+    if zero_count > one_count {
+      gamma.push('0');
+      epsilon.push('1');
+    } else {
+      gamma.push('1');
+      epsilon.push('0');
+    }
+
   }
-  return increases - 1;
+  let g: String = gamma.into_iter().collect();
+  let e: String = epsilon.into_iter().collect();
+  println!("gamma {}", g);
+  println!("epsil {}", e);
+  let gamma_val = isize::from_str_radix(&g, 2).unwrap();
+  let epsilon_val = isize::from_str_radix(&e, 2).unwrap();
+  println!("gamma val {}", gamma_val);
+  println!("epsil val {}", epsilon_val);
+  return (gamma_val * epsilon_val).try_into().unwrap()
+  // return -1
 }
 
-fn part2(input: Vec<i32>) -> i32 {
-  let mut increases = 0;
-  let mut lastSum = 0;
-  let mut currentSum = 0;
-  
-  for (index, val) in input.iter().enumerate() {
-    if index > 1 && index < 1999 {
-      println!("Part 2 previous values {} {} {}", input[index-1], input[index-2], val);
-      currentSum = val + input[index-1] + input[index-2];
-      lastSum = val + input[index-1] + input[index+1];
-      println!("Part 2 compare {} {} ", currentSum, lastSum);
-      if lastSum > currentSum {
-        increases += 1;
+
+
+fn part2(input: Vec<Vec<char>>) -> i32 {
+  let mut oxygen: Vec<i32> = vec![];
+  let mut carbon: Vec<i32> = vec![];
+
+  let mut keep: Vec<i32> = vec![];
+  // let all_bin = input.len();
+  keep = input[y].clone()
+  while keep.len() != 1 {
+
+    for y in 0..input[0].len() {
+      
+    let mut gamma: Vec<i32> = vec![];
+    let mut epsilon: Vec<i32> = vec![];
+
+      let mut zero_count = 0;
+      let mut one_count = 0;
+
+      for x in 0..input.len() {
+        let current = input[x][y];
+        if current == '0' {
+          zero_count+=1;
+          gamma.push(x)
+        }
+        else if current == '1' {
+          one_count+=1;
+          epsilon.push(x)
+        }
       }
     }
   }
-  return increases;
+
+
+  // let g: String = gamma.into_iter().collect();
+  // let e: String = epsilon.into_iter().collect();
+  // println!("gamma {}", g);
+  // println!("epsil {}", e);
+  // let gamma_val = isize::from_str_radix(&g, 2).unwrap();
+  // let epsilon_val = isize::from_str_radix(&e, 2).unwrap();
+  // println!("gamma val {}", gamma_val);
+  // println!("epsil val {}", epsilon_val);
+  // return (gamma_val * epsilon_val).try_into().unwrap()
+  return -1
 }
 
-fn load_from_file(file_path: &str) -> Vec<i32> {
-    let file = File::open(file_path).expect("file wasn't found.");
-    let reader = BufReader::new(file);
+fn load_from_file(file_path: &str) -> Vec<Vec<char>> {
+  let file = File::open(file_path).expect("file wasn't found.");
+  let reader = BufReader::new(file);
 
-    let numbers: Vec<i32> = reader
-        .lines()
-        .map(|line| line.unwrap().parse::<i32>().unwrap())
-        .collect();
-    return numbers;
+  let lines: Vec<String> = reader
+      .lines()
+      .map(|line| line.expect("Could not parse line"))
+      .collect();
+
+  let mut commands = Vec::new();
+    for line in lines {
+      let char_vec: Vec<char> = line.chars().collect();
+      commands.push(char_vec)
+    }
+    return commands;
 }
