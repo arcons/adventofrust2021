@@ -57,54 +57,54 @@ fn part2(input: Vec<Vec<char>>) -> i32 {
 
   // let all_bin = input.len();
   // keep = input[y].clone()
-  // while oxygen.len() != 1 {
-    let mut ox_index: Vec<i32> = vec![];
-    let mut ca_index: Vec<i32> = vec![];
-    
+  while oxygen.len() != 1 {
+    let mut ox_index: Vec<Vec<char>> = vec![];
+    let mut ca_index: Vec<Vec<char>> = vec![];
+    let mut pos = 0;
     //
-    for y in 0..oxygen.len() {
+    for mut y in 0..oxygen.len() {
       
       let mut zero_count = 0;
       let mut one_count = 0;
 
-      for x in 0..input.len() {
-        let current = input[x][y];
-        let current_row = input[y].clone();
+      // for x in 0..oxygen.len() {
+
+        let current = oxygen[y][pos].clone();
+        let current_row = oxygen[y].clone();
+        println!("current val {:?}", current);
+        println!("current row val {:?}", current_row);
         if current == '0' {
           zero_count+=1;
-          ca_index.push(x.try_into().unwrap());
+          ca_index.push(current_row);
         }
         else if current == '1' {
           one_count+=1;
-          ox_index.push(x.try_into().unwrap());
+          ox_index.push(current_row);
         }
-      }
-      println!("ox_index val {:?}", ox_index);
-      println!("ca_index val {:?}", ca_index);
+      // }
+      // println!("ox_index val {:?}", ox_index);
+      // println!("ca_index val {:?}", ca_index);
 
       // println!("input at 0,5 {:?}", input[0]);
-      let mut new_ox: Vec<Vec<[char]>> = vec![];
+      let mut new_ox: Vec<Vec<char>> = vec![vec![]];
       if zero_count >= one_count {
-        for index in ox_index {
-          println!("cloned_val val {:?}", input[index]);
-          // let cloned_val = input[index].clone()
-          // println!("cloned_val val {:?}", cloned_val);
-          // new_ox.push(input[index])
+        for index in ox_index.iter() {
+          new_ox.push(index.to_vec())
         }
       } 
       else {
-        for index in ca_index {
-          println!("cloned_val val {:?}", input[index]);
-          // let cloned_val = input[index].clone()
-          // println!("cloned_val val {:?}", cloned_val);
-          // new_ox.push(input[index])
+        for index in ca_index.iter() {
+          new_ox.push(index.to_vec())
         }
       }
-      // oxygen = ca_index.clone();
+      // println!("ca_index val {:?}", new_ox);
+      y = 0;
+      pos+=1;
+      oxygen = new_ox.clone();
+      println!("after oxygen val {:?}", oxygen);
       // println!("ca_index val {:?}", oxygen);
-
     }
-  // }
+  }
 
   // while carbon.len() != 1 {
   //   let mut oxIndex: Vec<Vec<char>> = vec![];
@@ -136,6 +136,7 @@ fn part2(input: Vec<Vec<char>>) -> i32 {
   //   }
   // }
 
+  println!("final oxygen val {:?}", oxygen);
   // let o: String = oxygen[0].into_iter().collect();
   // let c: String = carbon[0].into_iter().collect();
   // println!("oxygen bit {}", o);
