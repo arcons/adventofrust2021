@@ -39,24 +39,32 @@ fn load_from_file(file_path: &str) -> Vec<i32> {//, vec<vec<i32>>) {
       .lines()
       .map(|line| line.expect("Could not parse line"))
       .collect();
-  let mut firstLine = &lines[0];
-  println!("firstLine {:?}", firstLine);
+  let mut first_line: Vec<&str> = lines[0].split(',').collect();
+  println!("firstLine {:?}", first_line);
   lines.remove(0);
-  println!("lines {:?}", lines);
   let numbers: Vec<i32> = Vec::new(); //= firstLine.pop().map(|line| line.split(',').unwrap().parse::<i32>()).collect();
 
-  let mut commands = Vec::new();
+  // remvove first empty line
+  // let mut allBoards = Vec::new();
+  let mut board : Vec<Vec<&str>> = Vec::new();
+  lines.remove(0);
+  board.push(vec![vec![""]]);
+  println!("lines {:?}", lines);
   for line in lines {
-      let mut split = line.split_whitespace();
-      let dir = split.next().unwrap();
-      // println!("dir {:?}", dir);
-      let num = split.next().unwrap().parse::<i32>().unwrap();
-      // println!("num {:?}", num);
-      let new_command = {Command {direction: dir.to_string(), number: num}};
-      commands.push(new_command);
+    if line != "" {
+      let mut row: Vec<&str> = line.split_whitespace().collect();
+      println!("row {:?}", &row);
+      board.append(&row);
+    }
+    else {
+      println!("board {:?}", board);
+      // allBoards.push(board);
+      // clear vec
+      board = vec![vec![""]];
+    }
     // let com = line.split_whitespace().next().next();
   }
-  println!("numbers {:?}", numbers);
+  // println!("boards {:?}", allBoards);
   
   return numbers;
 }
