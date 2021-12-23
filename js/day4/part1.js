@@ -1,13 +1,13 @@
 const fs = require('fs')
  
-var contents = fs.readFileSync('./test.txt', 'utf8');
+var contents = fs.readFileSync('./input.txt', 'utf8');
 // var contents = fs.readFileSync('./input.txt', 'utf8');
 // write function to grab all attendees
 // example parse
 // Format
 let input = contents.split(/\r?\n/);
 const bingoCalls = input[0].split(',').map(x=>parseInt(x))
-console.log("bingo", bingoCalls)
+// console.log("bingoCalls", bingoCalls)
 
 // remove first item
 input.shift()
@@ -27,7 +27,7 @@ input.forEach(x => {
 })
 boards.push(currentBoard)
 
-console.log("boards", boards)
+// console.log("boards", boards)
 
 // Brute force, loop through the entire list every time
 // Math solution, keep track of each number in array and sum total at end
@@ -38,8 +38,27 @@ console.log(marked)
 
 let bingo = false;
 
-const check
+// only veritical and horizontal
+const isBingo = (board, y,x) => {
+  let bingoCount = 0
+  // check horizontal 
+  for(let i = 0; i < 5; i++){
+    const marked = board?.[y]?.[i] == -1 ? true : false
+    if(marked) bingoCount++
+  }
+  if(bingoCount == 5) {
+    return true
+  }
+  bingoCount = 0
+  for(let i = 0; i < 5; i++) {
+    const marked = board?.[i]?.[x] == -1 ? true : false
+    if(marked) bingoCount++
+  }
+  return (bingoCount == 5)
+}
 
+let winningBoard;
+let winningNum;
 for(let i = 0; i < bingoCalls.length; i++) {
   if (bingo) break;
 
@@ -51,9 +70,25 @@ for(let i = 0; i < bingoCalls.length; i++) {
         if (row.includes(bingoCalls[i])) {
           const rowIndex = row.indexOf(bingoCalls[i])
           board[index][rowIndex] = -1
+          if(bingoCalls[i] == 24) {
+            console.log('break')
+          }
+          if(isBingo(board, index, rowIndex)) {
+            winningBoard = board
+            winningNum = bingoCalls[i]
+            bingo = true;
+            return;
+          }
         }
+        if(bingo) return
       })
-      console.log(board)
+      if(bingo) {
+        console.log("Winner", board)
+        return
+      }
   })
-
 }
+// reduce winning board to single array
+let winningSum = winningBoard.flat().filter(val => val > 0).reduce((partial_sum, a) => partial_sum + a, 0)
+const sol = winningSum * winningNum
+console.log('sol', sol)
