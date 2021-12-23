@@ -1,6 +1,6 @@
 const fs = require('fs');
  
-var contents = fs.readFileSync('./test.txt', 'utf8');
+var contents = fs.readFileSync('./input.txt', 'utf8');
 // var contents = fs.readFileSync('./input.txt', 'utf8');
 // write function to grab all attendees
 // example parse
@@ -8,7 +8,7 @@ var contents = fs.readFileSync('./test.txt', 'utf8');
 const input = contents.split(/\r?\n/).map((x)=> x.split(" -> ").map(val => val.split(',').map(x => parseInt(x))));
 
 // console.log(input)
-const boardDim = 10
+const boardDim = 1000
 let board = []
 let row = [boardDim]
 
@@ -49,29 +49,39 @@ input.forEach(command => {
         // only goes at +1,-1 or +1, +1
         // time to loop is always the same only direction changes
         // determine dir by checking if x2-x1 > 0
-        const downLeft = (endX - startX) > 0
-        const dStartX =  Math.max(startX, endX)// : Math.min(startX, endX)
-        const dStartY =  !downLeft ? Math.max(startY, endY) : Math.min(startY, endY)
+        const downRight = (endX - startX) > 0
+        const reverse = (startY - endY) > 0
+        let dStartX = Math.max(startX, endX)
+        const dStartY = Math.min(startY, endY)
         const end = Math.max(diffX, diffY)
         //determine whether to loop x or y
+        // always go down so incremenet Y
         for(let i = 0; i < end+1; i++) {
-          if(downLeft) {
-            if(Number.isInteger(board?.[dStartX-i]?.[dStartY+i])) {
-              board[dStartX-i][dStartY+i]++
+          if(downRight || reverse) {
+            // if(reverse) {
+            if(!(downRight && reverse)) {
+              dStartX = Math.min(startX, endX)
+              // }
+              if(Number.isInteger(board?.[dStartY+i]?.[dStartX+i])) {
+                board[dStartY+i][dStartX+i]++
+              }
+            } else {
+              if(Number.isInteger(board?.[dStartY+i]?.[dStartX-i])) {
+                board[dStartY+i][dStartX-i]++
+              }
             }
           } else {
-            if(Number.isInteger(board?.[dStartX-i]?.[dStartY-i])) {
-              board[dStartX-i][dStartY-i]++
+            if(Number.isInteger(board?.[dStartY+i]?.[dStartX-i])) {
+              board[dStartY+i][dStartX-i]++
             }
           }
         }
+      // console.log(board)
   }
-  // console.log(board)
 })
 
 
 // find number of 2 or more
-console.log(board)
 let winningSum = board.flat().filter(val => val > 1).length
 // wrong 20101
 console.log('Danger zone', winningSum)
