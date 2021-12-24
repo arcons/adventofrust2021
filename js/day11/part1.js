@@ -1,6 +1,6 @@
 const fs = require('fs');
  
-var contents = fs.readFileSync('./firstTest.txt', 'utf8');
+var contents = fs.readFileSync('./input.txt', 'utf8');
 // var contents = fs.readFileSync('./input.txt', 'utf8');
 // write function to grab all attendees
 // example parse
@@ -10,6 +10,9 @@ const input = contents.split(/\r?\n/).map((x)=> x.split('').map(val => parseInt(
 // find total number of flashes
 let flashed = new Set()
 const incrementAround = (y,x) => {
+  if(y == 4 && x == 9) {
+    let q = 0
+  }
 
     const positions = {
     // 'current' : { flashCount: input[y][x], position: {y,x}},
@@ -49,6 +52,16 @@ const incrementAround = (y,x) => {
               // if(input[posY][posX] != 10 && input[posY][posX] != 0 && !flashed.has(evalPos)) {
                 // input[posY][posX]++
               // }
+
+              if (!flashed.has(evalPos)){
+                // if(posX == 0 & posY == 0) {
+                //   console.log('figure out double increment')
+                // }
+                // if(input[posY][posX] != 10 && input[posY][posX] != 0 && !flashed.has(evalPos)) {
+                  input[posY][posX]++
+                // }
+              } 
+
               if(input[posY][posX] >= 10 && !flashed.has(evalPos)) {
                 input[posY][posX] = 0
                 if(posX == 1 & posY == 1) {
@@ -57,14 +70,8 @@ const incrementAround = (y,x) => {
                 console.log(`Flash at with pos x:${posX} y:${posY}`)
                 flashed.add(evalPos)
                 incrementAround(posY,posX);
-              } else if (!flashed.has(evalPos)){
-                if(posX == 0 & posY == 0) {
-                  console.log('figure out double increment')
-                }
-                // if(input[posY][posX] != 10 && input[posY][posX] != 0 && !flashed.has(evalPos)) {
-                  input[posY][posX]++
-                // }
-              } else {
+              } 
+              else {
                 console.log("Bad")
               }
             }
@@ -77,7 +84,7 @@ const incrementAround = (y,x) => {
 // recursive solution is probably best option
 // probably a away to do this with finding how often each position changes
 let totalFlash = 0
-for(let n = 0; n < 2; n++) {
+for(let n = 0; n < 100; n++) {
   // increase all by 1
   for(let y=0; y < input[0].length; y++) {
     for(let x=0; x < input.length; x++) {
@@ -86,24 +93,29 @@ for(let n = 0; n < 2; n++) {
   }
   // console.log(incrementAround(2,2))
   console.log("step ", (n+1))
-  console.log(input)
+  // console.log(input)
 
   for(let y=0; y < input[0].length; y++) {
     for(let x=0; x < input.length; x++) {
       if(input[y][x] >= 10) {
         let temp = {y, x}
         let evalPos = JSON.stringify(temp)
-        flashed.add(temp)
+        flashed.add(evalPos)
         input[y][x] = 0
         incrementAround(y,x);
-        totalFlash += flashed.size
-        flashed = new Set()
       }
     }
   }
-  console.log(`step ${(n+1)} after flash`)
-  console.log(input)
+  totalFlash += flashed.size
+  flashed = new Set()
 
+
+  // console.log(`step ${(n+1)} after flash`)
+  // console.log(totalFlash)
+  // console.log("Input after flash", input)
+  for(let y=0; y < input[0].length; y++) {
+    console.log(input[y].join(''))
+  }
 }
 
 console.log("Total flashes", totalFlash)
