@@ -90,7 +90,7 @@ const foldAt = (fold, updatedPaper) => {
         // y = max/x % 2 may have to check for not half folds
         if (x > val) {
           x = (val - (x - val))
-          spot[0] = y
+          spot[0] = x
         }
         copyPaper[y][x] = '#'
       }
@@ -104,7 +104,7 @@ const foldAt = (fold, updatedPaper) => {
           spot[1] = y
         }
         // console.log('changing to', y)
-        // copyPaper[y][x] = '#'
+        copyPaper[y][x] = '#'
       }
       // console.log("bad at", x, y)
     }
@@ -116,7 +116,20 @@ const foldAt = (fold, updatedPaper) => {
 // const afterFold =foldAt(folds[0], paper)
 
 folds.forEach(fold => {
-  paper = foldAt(fold, paper)
+  if(fold == "y=13")
+{
+  console.log("trace")
+}
+  const tempPaper = JSON.parse(JSON.stringify(foldAt(fold, paper)))
+  paper = tempPaper
+  console.log("folding ", fold)
+  for(let y=0; y < paper.length; y++) {
+    console.log(paper[y].join(''))
+  }
+  
+  console.log("")
+  console.log("")
+
 })
 
 // let counter = 0
@@ -124,8 +137,9 @@ folds.forEach(fold => {
 //   for(let x = 0; x < afterFold[0].length; x++)
 //   if(afterFold[y][x] == '#') counter++
 // }
-
-// console.log("final", counter)
+console.log("")
+console.log("")
+console.log("final")
 // folding, divide by 2 and subtract from greater value
 
 for(let y=0; y < paper.length; y++) {
