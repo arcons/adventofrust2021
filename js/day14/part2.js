@@ -36,7 +36,7 @@ pairInsertion.forEach(val => {
 
 // originally do 10 steps
 // do 40 for part 2 brute force may be a awhile
-for(let i = 0; i < 10; i++) {
+for(let i = 0; i < 40; i++) {
   let index = 0;
   while(index < polyTemplate.length) {
     const twoChar = polyTemplate[index] + polyTemplate[index+1]
