@@ -72,4 +72,5 @@ Object.entries(alphabetCounter).forEach((keyVal) => {
   min = Math.min(keyVal[1], min)
 })
 
-console.log("part 1 ", max-min)
+// started going to run overnight
+console.log("part 2 ", max-min)
