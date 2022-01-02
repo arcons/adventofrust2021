@@ -5,6 +5,8 @@ var contents = fs.readFileSync('./input.txt', 'utf8');
 // write function to grab all attendees
 // example parse
 // Format
+var start = new Date()
+var hrstart = process.hrtime()
 const input = contents.split(/\r?\n/);
 
 let polyTemplate = input.shift()
@@ -71,5 +73,11 @@ Object.entries(alphabetCounter).forEach((keyVal) => {
   max = Math.max(keyVal[1], max)
   min = Math.min(keyVal[1], min)
 })
+
+var end = new Date() - start,
+hrend = process.hrtime(hrstart)
+
+console.info('Execution time: %dms', end)
+console.info('Execution time (hr): %ds %dms', hrend[0], hrend[1] / 1000000)
 
 console.log("part 1 ", max-min)

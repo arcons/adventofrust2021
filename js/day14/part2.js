@@ -1,6 +1,6 @@
 const fs = require('fs')
  
-var contents = fs.readFileSync('./input.txt', 'utf8');
+var contents = fs.readFileSync('./test.txt', 'utf8');
 // var contents = fs.readFileSync('./input.txt', 'utf8');
 // write function to grab all attendees
 // example parse
@@ -33,24 +33,43 @@ pairInsertion.forEach(val => {
 
 
 // take the most element subtract least element 
+let wholeWord = ''
+const eachPosition = (currentWord, turn) => {
+  if(turn === 0) {
+    let twoChar = currentWord[0] + currentWord[1]
+    let polySplit = currentWord.split('')
+    polySplit.splice(0, 2, pairMap.get(twoChar))
+    currentWord = polySplit[0]
+    turn++
+    currentWord = eachPosition(currentWord, turn)
+  }
+  else if(turn !== 9) {
+    let twoChar = currentWord[1] + currentWord[2]
+    let polySplit = currentWord.split('')
+    polySplit.splice(0, 2, pairMap.get(twoChar))
+    turn++
+    currentWord += eachPosition(polySplit[0], turn)
+  }
+  return currentWord
+}
 
 // originally do 10 steps
 // do 40 for part 2 brute force may be a awhile
-for(let i = 0; i < 40; i++) {
-  let index = 0;
-  while(index < polyTemplate.length) {
-    const twoChar = polyTemplate[index] + polyTemplate[index+1]
-    if(pairMap.has(twoChar)) {
-      let polySplit = polyTemplate.split('')
-      polySplit.splice(index,2,pairMap.get(twoChar))
-      polyTemplate = polySplit.join('')
-      index+=2
-    } else {
-      index++
-    }
-    // console.log("updated poly", polyTemplate)
+// swap the forty swap, do each position the ten times
+let index = 0;
+while(index < polyTemplate.length) {
+  let twoChar = polyTemplate[index] + polyTemplate[index+1]
+  
+  if(pairMap.has(twoChar)) {
+    const positionWord = eachPosition(twoChar, 0)
+    let polySplit = polyTemplate.split('')
+    polySplit.splice(index, 2, positionWord)
+    polyTemplate = polySplit.join('')
+    wholeWord = ''
+    index+=2
+  } else {
+    index++
   }
-  // console.log("updated poly after turn ",i, polyTemplate)
 }
 
 polyTemplate = polyTemplate.split('')
@@ -72,5 +91,5 @@ Object.entries(alphabetCounter).forEach((keyVal) => {
   min = Math.min(keyVal[1], min)
 })
 
-// started going to run overnight
+// started going to run overnight, start ~315PM 12/29
 console.log("part 2 ", max-min)
